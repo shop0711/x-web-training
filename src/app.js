@@ -8,8 +8,8 @@ const chapters = [
     handle: "@training_x",
     time: "固定",
     title: "X運用をタイムラインで学ぶ",
-    body: "スマホ閲覧を前提に、Xのタイムラインを追う感覚で研修内容を読める構成にします。",
-    tags: ["スマホ前提", "タイムライン型", "実務研修"],
+    body: "スマホ閲覧を前提にしつつ、PCでも目次を見ながら研修内容を追える構成にします。",
+    tags: ["スマホ前提", "PC対応", "タイムライン型"],
     summary: "全体像",
     metrics: { replies: "01", reposts: "導入", likes: "準備中" }
   },
@@ -119,9 +119,9 @@ function renderPost(chapter, index) {
   `;
 }
 
-function renderContents() {
+function renderContents(className = "contents-panel") {
   return `
-    <section class="contents-panel" id="contents" aria-label="目次">
+    <section class="${className}" id="${className === "contents-panel" ? "contents" : "desktop-contents"}" aria-label="目次">
       <div class="section-heading">
         <p>Jump Menu</p>
         <h2>見たい章へ移動</h2>
@@ -143,65 +143,112 @@ function renderContents() {
   `;
 }
 
+function renderModeButtons() {
+  return viewModes
+    .map(
+      (item) => `
+        <button type="button" data-mode="${item.id}" aria-pressed="${item.id === currentMode}">
+          ${item.label}
+        </button>
+      `
+    )
+    .join("");
+}
+
+function renderDesktopRail() {
+  return `
+    <aside class="desktop-rail" aria-label="PC用補助メニュー">
+      <section class="rail-card">
+        <p class="rail-label">View Mode</p>
+        <div class="rail-mode-switcher">
+          ${renderModeButtons()}
+        </div>
+      </section>
+      <section class="rail-card">
+        <p class="rail-label">Progress</p>
+        <div class="progress-list">
+          ${chapters
+            .map(
+              (chapter, index) => `
+                <a href="#${chapter.id}">
+                  <span>${String(index + 1).padStart(2, "0")}</span>
+                  ${chapter.summary}
+                </a>
+              `
+            )
+            .join("")}
+        </div>
+      </section>
+    </aside>
+  `;
+}
+
 function renderApp() {
   const mode = viewModes.find((item) => item.id === currentMode) ?? viewModes[0];
 
   document.querySelector("#app").innerHTML = `
-    <section class="phone-shell mode-${currentMode}" aria-label="X WEB研修資料">
-      <header class="app-header">
-        <a class="icon-button" href="#top" aria-label="先頭へ">↑</a>
-        <div>
-          <p>X WEB研修</p>
-          <h1>${mode.title}</h1>
-        </div>
-        <a class="icon-button" href="#contents" aria-label="目次へ">☰</a>
-      </header>
-
-      <section class="profile-hero" id="top">
-        <div class="cover"></div>
-        <div class="profile-row">
-          <div class="profile-avatar">X</div>
+    <div class="desktop-frame mode-${currentMode}">
+      <aside class="desktop-sidebar" aria-label="PC用目次">
+        <div class="desktop-brand">
+          <span>X</span>
           <div>
-            <h2>X WEB研修資料</h2>
-            <p>@x_training_materials</p>
+            <strong>X WEB研修資料</strong>
+            <small>@x_training_materials</small>
           </div>
         </div>
-        <p class="profile-copy">
-          内容が届いたら、各投稿カードを章・講義・演習に置き換えていきます。
-        </p>
+        ${renderContents("desktop-contents-panel")}
+      </aside>
+
+      <section class="phone-shell" aria-label="X WEB研修資料">
+        <header class="app-header">
+          <a class="icon-button" href="#top" aria-label="先頭へ">↑</a>
+          <div>
+            <p>X WEB研修</p>
+            <h1>${mode.title}</h1>
+          </div>
+          <a class="icon-button" href="#contents" aria-label="目次へ">☰</a>
+        </header>
+
+        <section class="profile-hero" id="top">
+          <div class="cover"></div>
+          <div class="profile-row">
+            <div class="profile-avatar">X</div>
+            <div>
+              <h2>X WEB研修資料</h2>
+              <p>@x_training_materials</p>
+            </div>
+          </div>
+          <p class="profile-copy">
+            内容が届いたら、各投稿カードを章・講義・演習に置き換えていきます。
+          </p>
+        </section>
+
+        <section class="mode-switcher" aria-label="表示モード">
+          ${renderModeButtons()}
+        </section>
+
+        ${renderContents()}
+
+        <nav class="tabs" aria-label="資料タブ">
+          <a href="#intro" aria-current="page">Posts</a>
+          <a href="#contents">Index</a>
+          <a href="#practice">Practice</a>
+        </nav>
+
+        <section class="timeline" aria-label="タイムライン">
+          ${chapters.map((chapter, index) => renderPost(chapter, index)).join("")}
+        </section>
+
+        <nav class="bottom-nav" aria-label="主要ナビゲーション">
+          <a href="#top">Top</a>
+          <a href="#contents">Index</a>
+          <a href="#post">Post</a>
+          <a href="#practice">Work</a>
+        </nav>
       </section>
 
-      <section class="mode-switcher" aria-label="表示モード">
-        ${viewModes
-          .map(
-            (item) => `
-              <button type="button" data-mode="${item.id}" aria-pressed="${item.id === currentMode}">
-                ${item.label}
-              </button>
-            `
-          )
-          .join("")}
-      </section>
-
-      ${renderContents()}
-
-      <nav class="tabs" aria-label="資料タブ">
-        <a href="#intro" aria-current="page">Posts</a>
-        <a href="#contents">Index</a>
-        <a href="#practice">Practice</a>
-      </nav>
-
-      <section class="timeline" aria-label="タイムライン">
-        ${chapters.map((chapter, index) => renderPost(chapter, index)).join("")}
-      </section>
-
-      <nav class="bottom-nav" aria-label="主要ナビゲーション">
-        <a href="#top">Top</a>
-        <a href="#contents">Index</a>
-        <a href="#post">Post</a>
-        <a href="#practice">Work</a>
-      </nav>
-    </section>
+      ${renderDesktopRail()}
+    </div>
   `;
 
   document.querySelectorAll("[data-mode]").forEach((button) => {
