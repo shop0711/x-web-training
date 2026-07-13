@@ -7,6 +7,7 @@ import {
   ChevronRight,
   CircleHelp,
   Columns3,
+  Download,
   Lightbulb,
   List,
   Menu,
@@ -190,6 +191,7 @@ export default function App() {
         <div className="rail-actions">
           <IconButton label={dark ? "ライトモード" : "ダークモード"} onClick={() => setDark((value) => !value)}>{dark ? <Sun /> : <Moon />}</IconButton>
           <IconButton label="目次を開く" onClick={() => setTocOpen(true)}><List /></IconButton>
+          <a className="icon-btn" href="/downloads/X-training-editable.pptx" download aria-label="編集用PowerPointをダウンロード" title="編集用PowerPointをダウンロード"><Download /></a>
         </div>
         <div className="rail-pager">
           <IconButton label="前のページ" onClick={() => goTo(currentIndex - 1)} className={currentIndex === 0 ? "disabled" : ""}><ArrowLeft /></IconButton>
@@ -202,7 +204,7 @@ export default function App() {
         <div className="toc-overlay" role="dialog" aria-modal="true" aria-label="目次">
           <button type="button" className="toc-backdrop" aria-label="目次を閉じる" onClick={() => setTocOpen(false)} />
           <div className="toc-panel">
-            <header><div><span>CONTENTS</span><h2>研修目次</h2></div><IconButton label="目次を閉じる" onClick={() => setTocOpen(false)}><X /></IconButton></header>
+            <header><div><span>CONTENTS</span><h2>研修目次</h2></div><div className="toc-header-actions"><a className="icon-btn" href="/downloads/X-training-editable.pptx" download aria-label="編集用PowerPointをダウンロード" title="編集用PowerPointをダウンロード"><Download /></a><IconButton label="目次を閉じる" onClick={() => setTocOpen(false)}><X /></IconButton></div></header>
             <Contents currentIndex={currentIndex} onSelect={goTo} />
           </div>
         </div>
