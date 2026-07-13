@@ -49,7 +49,7 @@ a {
 .app-header {
   position: sticky;
   top: 0;
-  z-index: 10;
+  z-index: 20;
   display: grid;
   grid-template-columns: 44px 1fr 44px;
   align-items: center;
@@ -84,9 +84,9 @@ a {
   border-radius: 999px;
   color: #0f1419;
   background: transparent;
-  font-size: 22px;
+  font-size: 19px;
+  font-weight: 800;
   line-height: 1;
-  cursor: pointer;
 }
 
 .icon-button:hover {
@@ -95,6 +95,7 @@ a {
 
 .profile-hero {
   border-bottom: 1px solid #eff3f4;
+  scroll-margin-top: 118px;
 }
 
 .cover {
@@ -153,10 +154,105 @@ a {
   line-height: 1.65;
 }
 
-.tabs {
+.mode-switcher {
   position: sticky;
   top: 58px;
-  z-index: 9;
+  z-index: 19;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+  padding: 8px 12px;
+  border-bottom: 1px solid #eff3f4;
+  background: rgb(255 255 255 / 94%);
+  backdrop-filter: blur(16px);
+}
+
+.mode-switcher button {
+  min-width: 0;
+  min-height: 36px;
+  border-radius: 999px;
+  color: #536471;
+  background: #eff3f4;
+  font-size: 13px;
+  font-weight: 800;
+  cursor: pointer;
+}
+
+.mode-switcher button[aria-pressed="true"] {
+  color: #ffffff;
+  background: #0f1419;
+}
+
+.contents-panel {
+  padding: 18px 16px;
+  border-bottom: 1px solid #eff3f4;
+  background: #ffffff;
+  scroll-margin-top: 108px;
+}
+
+.section-heading p,
+.section-heading h2 {
+  margin: 0;
+}
+
+.section-heading p {
+  color: #536471;
+  font-size: 12px;
+  font-weight: 800;
+}
+
+.section-heading h2 {
+  margin-top: 4px;
+  font-size: 20px;
+  line-height: 1.3;
+}
+
+.contents-list {
+  display: grid;
+  gap: 8px;
+  margin-top: 14px;
+}
+
+.contents-item {
+  display: grid;
+  grid-template-columns: 36px 1fr;
+  gap: 2px 10px;
+  align-items: center;
+  min-height: 58px;
+  padding: 10px 12px;
+  border: 1px solid #eff3f4;
+  border-radius: 8px;
+  background: #f7f9f9;
+}
+
+.contents-item span {
+  grid-row: span 2;
+  display: grid;
+  width: 32px;
+  height: 32px;
+  place-items: center;
+  border-radius: 999px;
+  color: #ffffff;
+  background: #1d9bf0;
+  font-size: 12px;
+  font-weight: 900;
+}
+
+.contents-item strong {
+  font-size: 15px;
+  line-height: 1.3;
+}
+
+.contents-item small {
+  color: #536471;
+  font-size: 12px;
+  line-height: 1.35;
+}
+
+.tabs {
+  position: sticky;
+  top: 109px;
+  z-index: 18;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   border-bottom: 1px solid #eff3f4;
@@ -188,6 +284,7 @@ a {
   gap: 10px;
   padding: 14px 16px;
   border-bottom: 1px solid #eff3f4;
+  scroll-margin-top: 166px;
 }
 
 .post-pinned {
@@ -196,6 +293,10 @@ a {
 
 .post-exercise {
   background: #fffdf6;
+}
+
+.avatar-link {
+  display: block;
 }
 
 .avatar {
@@ -323,7 +424,7 @@ a {
   right: 0;
   bottom: 0;
   left: 0;
-  z-index: 20;
+  z-index: 30;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   width: min(100%, 430px);
@@ -340,6 +441,39 @@ a {
   color: #0f1419;
   font-size: 12px;
   font-weight: 800;
+}
+
+.mode-index .timeline {
+  display: none;
+}
+
+.mode-index .tabs {
+  display: none;
+}
+
+.mode-focus .profile-hero,
+.mode-focus .contents-panel,
+.mode-focus .tabs {
+  display: none;
+}
+
+.mode-focus .post {
+  grid-template-columns: 1fr;
+  padding: 22px 20px;
+}
+
+.mode-focus .avatar-link,
+.mode-focus .post-header span,
+.mode-focus .metrics {
+  display: none;
+}
+
+.mode-focus .post h2 {
+  font-size: 24px;
+}
+
+.mode-focus .post p {
+  font-size: 16px;
 }
 
 @media (min-width: 720px) {
