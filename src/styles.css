@@ -46,6 +46,7 @@ button, a { color: inherit; font: inherit; }
 button { border: 0; cursor: pointer; }
 svg { width: 1.25em; height: 1.25em; stroke-width: 1.8; }
 .app-shell { min-height: 100vh; }
+.training-viewport { display: contents; }
 .skip-link { position: fixed; top: -80px; left: 16px; z-index: 200; padding: 10px 14px; border-radius: 6px; color: #fff; background: #0f1419; }
 .skip-link:focus { top: 16px; }
 .top-progress { position: fixed; inset: 0 0 auto; z-index: 100; height: 3px; background: transparent; }
@@ -238,7 +239,7 @@ svg { width: 1.25em; height: 1.25em; stroke-width: 1.8; }
   .desktop-nav .contents-groups { gap: 16px; }.desktop-nav .contents-chapter { border: 0; }.desktop-nav .contents-group button { min-height: 32px; padding-block: 5px; }
   .nav-footer { display: grid; grid-template-columns: 38px 1fr; gap: 9px; align-items: center; padding: 14px 18px; border-top: 1px solid var(--line); }.nav-footer > span { display: grid; width: 36px; height: 36px; place-items: center; border-radius: 50%; color: #fff; background: var(--blue); font-size: 11px; font-weight: 900; }.nav-footer strong, .nav-footer small { display: block; }.nav-footer strong { overflow: hidden; font-size: 11px; text-overflow: ellipsis; white-space: nowrap; }.nav-footer small { margin-top: 3px; color: var(--muted); font-size: 9px; }
   .rail-section { padding: 18px 0; border-bottom: 1px solid var(--line); }.rail-label { display: block; margin-bottom: 10px; color: var(--muted); font-size: 8px; font-weight: 900; letter-spacing: .12em; }
-  .segmented-control { display: grid; grid-template-columns: 1fr 1fr; gap: 4px; padding: 4px; border-radius: 7px; background: var(--canvas); }.segmented-control button { display: grid; gap: 3px; min-height: 56px; padding: 8px; place-items: center; border-radius: 5px; color: var(--muted); background: transparent; font-size: 8px; font-weight: 800; }.segmented-control button.active { color: var(--ink); background: var(--paper); box-shadow: 0 2px 8px rgb(15 20 25 / 9%); }.segmented-control svg { font-size: 17px; }
+  .segmented-control { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; padding: 4px; border-radius: 7px; background: var(--canvas); }.segmented-control button { display: grid; gap: 3px; min-height: 56px; padding: 8px 4px; place-items: center; border-radius: 5px; color: var(--muted); background: transparent; font-size: 8px; font-weight: 800; }.segmented-control button.active { color: var(--ink); background: var(--paper); box-shadow: 0 2px 8px rgb(15 20 25 / 9%); }.segmented-control svg { font-size: 17px; }
   .chapter-status > span:not(.rail-label) { color: var(--blue); font-size: 9px; font-weight: 900; }.chapter-status strong { display: block; margin-top: 6px; font-size: 13px; line-height: 1.4; }.dot-progress { display: flex; gap: 4px; margin-top: 12px; }.dot-progress i { width: 100%; height: 3px; border-radius: 3px; background: var(--line); }.dot-progress i.filled { background: var(--blue); }
   .rail-actions { display: flex; gap: 8px; margin-top: 18px; }.rail-pager { display: grid; grid-template-columns: 40px 1fr 40px; gap: 5px; align-items: center; margin-top: auto; }.rail-pager > span { color: var(--muted); font-size: 9px; text-align: center; }.rail-pager strong { color: var(--ink); font-size: 14px; }
   :root[data-view="present"] html, :root[data-view="present"] { scroll-snap-type: y mandatory; }
@@ -255,6 +256,103 @@ svg { width: 1.25em; height: 1.25em; stroke-width: 1.8; }
   .slide-heading h2 { font-size: 25px; }.conclusion { margin-top: 8px; font-size: 13px; line-height: 1.45; }.slide-kicker { margin-bottom: 8px; }
   .visual-stage { min-height: 218px; margin: 14px 0; }.cover-slide .visual-stage { min-height: 250px; }
   .learning-card { padding: 9px; }.learning-card p { font-size: 10px; }.card-icon { width: 30px; height: 30px; }
+}
+
+@media (min-width: 1120px) {
+  :root[data-view="mobile"] { overflow: hidden; scroll-snap-type: none; }
+  :root[data-view="mobile"] body { overflow: hidden; }
+  :root[data-view="mobile"] .training-viewport {
+    position: fixed;
+    top: 16px;
+    bottom: 16px;
+    left: calc(250px + (100vw - 468px) / 2);
+    z-index: 20;
+    display: block;
+    width: 390px;
+    max-height: 844px;
+    overflow: hidden;
+    border: 1px solid #26323a;
+    border-radius: 28px;
+    background: var(--paper);
+    box-shadow: 0 24px 70px rgb(15 20 25 / 22%);
+    transform: translateX(-50%);
+  }
+  :root[data-view="mobile"] .mobile-header {
+    position: absolute;
+    inset: 3px 0 auto;
+    display: grid;
+    border-radius: 27px 27px 0 0;
+  }
+  :root[data-view="mobile"] .mobile-pager {
+    position: absolute;
+    inset: auto 0 0;
+    display: grid;
+    border-radius: 0 0 27px 27px;
+  }
+  :root[data-view="mobile"] .slides-canvas {
+    width: 100%;
+    height: 100%;
+    margin-left: 0;
+    overflow-x: hidden;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    scroll-snap-type: y proximity;
+    scrollbar-width: thin;
+  }
+  :root[data-view="mobile"] .training-slide {
+    min-height: 100%;
+    padding: 76px 16px 88px;
+    scroll-snap-align: start;
+  }
+  :root[data-view="mobile"] .slide-inner {
+    display: grid;
+    grid-template-columns: none;
+    grid-template-rows: none;
+    width: min(100%, 1100px);
+    margin: auto;
+    column-gap: 0;
+  }
+  :root[data-view="mobile"] .slide-heading {
+    grid-column: auto;
+    grid-row: auto;
+    align-self: auto;
+    padding-bottom: 0;
+  }
+  :root[data-view="mobile"] .slide-heading h2 { font-size: 28px; }
+  :root[data-view="mobile"] .conclusion { font-size: 15px; }
+  :root[data-view="mobile"] .visual-stage {
+    grid-column: auto;
+    grid-row: auto;
+    min-height: 250px;
+    margin: 24px 0;
+  }
+  :root[data-view="mobile"] .cover-slide .slide-inner { grid-template-columns: none; }
+  :root[data-view="mobile"] .cover-slide .visual-stage { min-height: 330px; }
+  :root[data-view="mobile"] .learning-flow {
+    grid-column: auto;
+    grid-row: auto;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    align-self: auto;
+  }
+  :root[data-view="mobile"] .learning-card {
+    grid-template-columns: 38px 1fr;
+    min-height: 0;
+    padding: 12px;
+  }
+  :root[data-view="mobile"] .learning-card p { font-size: 12px; }
+  :root[data-view="mobile"] .term-note {
+    grid-column: auto;
+    grid-row: auto;
+    align-self: auto;
+    font-size: 10px;
+  }
+}
+
+@media (min-width: 1120px) and (max-width: 1350px) {
+  :root[data-view="mobile"] .training-viewport {
+    left: calc(220px + (100vw - 410px) / 2);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {

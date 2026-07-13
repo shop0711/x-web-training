@@ -12,13 +12,14 @@ import {
   Menu,
   Moon,
   MousePointer2,
+  Smartphone,
   Sun,
   X,
 } from "lucide-react";
 import { chapters, slides, type ChapterId, type Slide } from "./slides";
 import { Visual } from "./Visuals";
 
-type ViewMode = "scroll" | "present";
+type ViewMode = "scroll" | "present" | "mobile";
 
 function IconButton({ label, children, onClick, className = "" }: { label: string; children: React.ReactNode; onClick: () => void; className?: string }) {
   return <button type="button" className={`icon-btn ${className}`} aria-label={label} title={label} onClick={onClick}>{children}</button>;
@@ -100,6 +101,10 @@ export default function App() {
 
   useEffect(() => {
     document.documentElement.dataset.view = viewMode;
+    const frame = requestAnimationFrame(() => {
+      document.getElementById(currentSlide.id)?.scrollIntoView({ behavior: "auto", block: "start" });
+    });
+    return () => cancelAnimationFrame(frame);
   }, [viewMode]);
 
   useEffect(() => {
@@ -149,15 +154,23 @@ export default function App() {
         <div className="nav-footer"><span>{String(currentIndex + 1).padStart(2, "0")}</span><div><strong>{currentSlide.shortTitle}</strong><small>{Math.round(progress)}% 完了</small></div></div>
       </aside>
 
-      <header className="mobile-header">
-        <button type="button" className="mobile-brand" onClick={() => goTo(0)}><span>X</span><strong>X運用研修</strong></button>
-        <div className="mobile-count">{String(currentIndex + 1).padStart(2, "0")} / {slides.length}</div>
-        <IconButton label="目次を開く" onClick={() => setTocOpen(true)}><Menu /></IconButton>
-      </header>
+      <div className="training-viewport">
+        <header className="mobile-header">
+          <button type="button" className="mobile-brand" onClick={() => goTo(0)}><span>X</span><strong>X運用研修</strong></button>
+          <div className="mobile-count">{String(currentIndex + 1).padStart(2, "0")} / {slides.length}</div>
+          <IconButton label="目次を開く" onClick={() => setTocOpen(true)}><Menu /></IconButton>
+        </header>
 
-      <main className="slides-canvas">
-        {slides.map((slide, index) => <SlidePage key={slide.id} slide={slide} active={index === currentIndex} />)}
-      </main>
+        <main className="slides-canvas">
+          {slides.map((slide, index) => <SlidePage key={slide.id} slide={slide} active={index === currentIndex} />)}
+        </main>
+
+        <nav className="mobile-pager" aria-label="ページ送り">
+          <IconButton label="前のページ" onClick={() => goTo(currentIndex - 1)} className={currentIndex === 0 ? "disabled" : ""}><ArrowLeft /></IconButton>
+          <button type="button" className="mobile-page-title" onClick={() => setTocOpen(true)}><span>{currentSlide.eyebrow}</span><strong>{currentSlide.shortTitle}</strong></button>
+          <IconButton label="次のページ" onClick={() => goTo(currentIndex + 1)} className={currentIndex === slides.length - 1 ? "disabled" : ""}><ArrowRight /></IconButton>
+        </nav>
+      </div>
 
       <aside className="control-rail" aria-label="表示とページ操作">
         <div className="rail-section">
@@ -165,6 +178,7 @@ export default function App() {
           <div className="segmented-control">
             <button type="button" className={viewMode === "scroll" ? "active" : ""} onClick={() => setViewMode("scroll")} title="スクロール表示"><Columns3 /><span>Scroll</span></button>
             <button type="button" className={viewMode === "present" ? "active" : ""} onClick={() => setViewMode("present")} title="プレゼン表示"><MousePointer2 /><span>Present</span></button>
+            <button type="button" className={viewMode === "mobile" ? "active" : ""} onClick={() => setViewMode("mobile")} title="スマホ表示"><Smartphone /><span>Mobile</span></button>
           </div>
         </div>
         <div className="rail-section chapter-status">
@@ -183,12 +197,6 @@ export default function App() {
           <IconButton label="次のページ" onClick={() => goTo(currentIndex + 1)} className={currentIndex === slides.length - 1 ? "disabled" : ""}><ArrowRight /></IconButton>
         </div>
       </aside>
-
-      <nav className="mobile-pager" aria-label="ページ送り">
-        <IconButton label="前のページ" onClick={() => goTo(currentIndex - 1)} className={currentIndex === 0 ? "disabled" : ""}><ArrowLeft /></IconButton>
-        <button type="button" className="mobile-page-title" onClick={() => setTocOpen(true)}><span>{currentSlide.eyebrow}</span><strong>{currentSlide.shortTitle}</strong></button>
-        <IconButton label="次のページ" onClick={() => goTo(currentIndex + 1)} className={currentIndex === slides.length - 1 ? "disabled" : ""}><ArrowRight /></IconButton>
-      </nav>
 
       {tocOpen && (
         <div className="toc-overlay" role="dialog" aria-modal="true" aria-label="目次">
