@@ -1,35 +1,30 @@
-# X Web Training Materials
+# X運用研修 Web教材
 
-X向けWEB研修資料の独立プロジェクトです。
-
-## 方針
-
-- Instagram側の資料・ファイルには触れない
-- 研修内容は `content/training-outline.md` に集約してから画面へ反映する
-- 画像や参考素材は `assets/` 配下へ追加する
-- 公開・提出用の成果物は必要になった時点で `outputs/` に書き出す
+店舗スタッフ向けの、ブラウザ完結型X運用研修サイトです。添付の研修メモを軸に、30〜40分で理解・実践できる22ページへ再構成しています。
 
 ## 構成
 
-```text
-x-web-training/
-  index.html
-  package.json
-  src/
-    app.js
-    styles.css
-  content/
-    training-outline.md
-  assets/
-    images/
-    references/
-```
+- Opening: X運用研修
+- Chapter 01: Xは「専門性」を育てるSNS
+- Chapter 02: 見たくなる投稿を作る
+- Chapter 03: アルゴリズムを味方につける
 
-## 起動
+全ページを「結論 → 理由 → 具体例 → 実践」の順で統一し、SVGアイコンとCSS図解のみで表現しています。
 
-```powershell
+## 操作
+
+- スクロール、左右矢印キー、Page Up / Page Downで移動
+- 目次から各ページへ直接移動
+- Scroll / Present表示切り替え
+- ライト / ダークモード切り替え
+- スマートフォン、タブレット、PC対応
+
+## 開発
+
+```bash
 npm install
 npm run dev
+npm run build
 ```
 
-研修内容が届いたら、`content/training-outline.md` をもとに `src/app.js` のセクションデータへ展開します。
+React、TypeScript、Tailwind CSS、Viteで構成しています。
